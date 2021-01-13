@@ -1,0 +1,71 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+    excluded-user-agents: gozilla,traviata
+    mime-types: text/html,text/xml,text/plain,text/css,apply/json
+  undertow:
+    buffer-size: 512
+    direct-buffers: true
+    threads:
+      io: 4
+      worker: 32
+  shutdown: graceful
+
+spring:
+  application:
+    name: electric_management
+  profiles:
+    active: dev
+  mvc:
+    throw-exception-if-no-handler-found: true
+    dispatch-options-request: true
+    static-path-pattern: /**
+  quartz:
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: clusteredScheduler
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: false
+            clusterCheckinInterval: 10000
+            useProperties: falseW
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+    job-store-type: jdbc
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+# mybatis-plus配置
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      table-underline: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#TOKEN工具
+jwt:
+  header: Authorization
+  secret: 5edb3f56c87c48ad8dd7017208f4a161
+  expiresIn: 604800000
+  tokenType: "Bearer"
+
+logging:
+  config: classpath:config/logback-spring.xml

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vanwei.tech.mapper.RoleMapper">
+
+    <resultMap id="baseResultMap" type="com.vanwei.tech.vo.RoleVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="roleSql">
+        r.id,r.name,r.remark,r.create_time,r.update_time
+    </sql>
+
+    <select id="selectListByName" resultMap="baseResultMap">
+        SELECT
+        <include refid="roleSql"/>
+        FROM e_role r
+        <where>
+            r.deleted = 0
+            <if test="name != null and name != ''">
+                AND r.name LIKE CONCAT(#{query.name}, '%')
+            </if>
+        </where>
+        ORDER BY r.create_time DESC
+    </select>
+
+    <select id="selectListByUserId" resultMap="baseResultMap">
+        SELECT
+        <include refid="roleSql"/>
+        FROM e_role r LEFT JOIN w_user_role ur ON r.id=ur.role_id WHERE r.deleted=0 AND ur.user_id=#{userId}
+    </select>
+
+    <select id="selectPageVo" resultMap="baseResultMap">
+        SELECT
+        <include refid="roleSql"/>
+        FROM e_role r
+        <where>
+            r.deleted = 0
+            <if test="query.name != null and query.name != ''">
+                AND r.name LIKE CONCAT(#{query.name}, '%')
+            </if>
+        </where>
+        ORDER BY r.create_time DESC
+    </select>
+
+</mapper>

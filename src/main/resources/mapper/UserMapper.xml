@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vanwei.tech.mapper.UserMapper">
+
+    <resultMap id="baseResultMap" type="com.vanwei.tech.vo.UserVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="status" property="status"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <collection property="roleList" ofType="com.vanwei.tech.vo.RoleVO"
+                    select="com.vanwei.tech.mapper.RoleMapper.selectListByUserId" column="id">
+        </collection>
+    </resultMap>
+
+    <resultMap id="userVoResultMap" type="com.vanwei.tech.vo.UserVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="status" property="status"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="ucreate_time" property="createTime"/>
+        <result column="uupdate_time" property="updateTime"/>
+        <collection property="roleList" ofType="com.vanwei.tech.dto.RoleDTO">
+            <id column="rid" property="id"/>
+            <result column="name" property="name"/>
+            <result column="remark" property="remark"/>
+        </collection>
+    </resultMap>
+
+    <sql id="userRoleSql">
+		u.id,
+		u.username,
+		u.password,
+		u.phone,
+		u.email,
+		u.create_time AS ucreate_time,
+		u.update_time AS uupdate_time,
+		u.status,
+		u.last_login_time,
+		r.id rid,
+		r.name,
+		r.remark
+	</sql>
+
+    <select id="selectOneById" resultMap="userVoResultMap">
+        SELECT
+        <include refid="userRoleSql"/>
+        FROM e_user u
+        LEFT JOIN e_user_role ur ON u.id=ur.user_id
+        INNER JOIN e_role r ON ur.role_id=r.id
+        WHERE u.deleted=0 AND r.deleted=0 AND u.id=#{id}
+    </select>
+
+    <select id="selectOneByUsername" resultMap="userVoResultMap">
+        SELECT
+        <include refid="userRoleSql"/>
+        FROM e_user u
+        LEFT JOIN e_user_role ur ON u.id=ur.user_id
+        INNER JOIN e_role r ON ur.role_id=r.id
+        WHERE u.deleted=0 AND r.deleted=0 AND u.username=#{username}
+    </select>
+
+    <select id="selectPageVo" resultMap="userVoResultMap">
+        SELECT
+        <include refid="userRoleSql"/>
+        FROM e_user u
+        LEFT JOIN e_user_role ur ON u.id=ur.user_id
+        INNER JOIN e_role r ON ur.role_id=r.id
+        <where>
+         u.deleted=0 AND r.deleted=0
+         <if test="query.username != null and query.username != ''">
+            AND u.username LIKE CONCAT(#{query.username}, '%')
+         </if>
+         <if test="query.phone != null and query.phone != ''">
+             AND u.phone LIKE CONCAT(#{query.phone}, '%')
+         </if>
+         <if test="query.email != null and query.email != ''">
+             AND u.email LIKE CONCAT(#{query.email}, '%')
+         </if>
+        </where>
+        ORDER BY u.create_time DESC
+    </select>
+</mapper>
