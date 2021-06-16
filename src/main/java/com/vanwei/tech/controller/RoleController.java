@@ -33,7 +33,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @ApiOperation(value = "查询角色列表", notes = "查询角色列表")
-    @ApiImplicitParam(name = "name", value = "角色的名称", paramType = "query")
+    @ApiImplicitParam(name = "name", value = "角色的名称", paramType = "query", dataTypeClass = String.class)
     @Log
     @GetMapping("/actions/list")
     public Result<List<RoleVO>> listRole(@RequestParam(required = false) String name) {
@@ -61,7 +61,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "更新角色", notes = "更新角色信息")
-    @ApiImplicitParam(name = "id", value = "角色的ID", paramType = "path", required = true)
+    @ApiImplicitParam(name = "id", value = "角色的ID", paramType = "path", dataTypeClass = Long.class, required = true)
     @Log
     @PutMapping("/{id}")
     public Result<Map<String, Boolean>> updateRole(@PathVariable Long id, @Valid @RequestBody RoleRequestDTO roleDTO) {
@@ -70,7 +70,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "删除角色", notes = "删除角色")
-    @ApiImplicitParam(name = "id", value = "角色的ID", paramType = "path", required = true)
+    @ApiImplicitParam(name = "id", value = "角色的ID", paramType = "path", dataTypeClass = Long.class, required = true)
     @Log
     @DeleteMapping("/{id}")
     public Result<Map<String, Boolean>> removeRole(@PathVariable Long id) {

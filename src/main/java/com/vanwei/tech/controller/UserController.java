@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "查询用户信息", notes = "根据账号查询用户信息")
-    @ApiImplicitParam(name = "username", value = "账号", paramType = "query", required = true)
+    @ApiImplicitParam(name = "username", value = "账号", paramType = "query", dataTypeClass = String.class, required = true)
     @Log
     @GetMapping("/info/actions/get")
     public Result<UserDTO> getUserInfo(@RequestParam("username") String username) {
@@ -86,7 +86,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
-    @ApiImplicitParam(name = "id", value = "用户的ID", paramType = "path", required = true)
+    @ApiImplicitParam(name = "id", value = "用户的ID", paramType = "path", dataTypeClass = Long.class, required = true)
     @Log
     @PutMapping("/{id}")
     public Result<Map<String, Boolean>> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO userRequestDTO) {
