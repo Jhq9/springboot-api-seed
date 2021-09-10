@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.vanwei.tech.dto.UserDTO;
 import com.vanwei.tech.dto.request.UserLoginRequestDTO;
+import com.vanwei.tech.dto.request.UserQueryRequestDTO;
 import com.vanwei.tech.dto.request.UserRequestDTO;
 import com.vanwei.tech.entity.User;
 import com.vanwei.tech.vo.UserInfoVO;
@@ -24,11 +25,10 @@ public interface UserService extends IService<User> {
     /**
      * 分页查询用户列表
      *
-     * @param page           分页信息
-     * @param userRequestDTO 查询条件信息
+     * @param queryDTO 查询条件信息
      * @return 用户列表
      */
-    IPage<UserVO> listUser(Page page, UserRequestDTO userRequestDTO);
+    Page<UserVO> listUser(UserQueryRequestDTO queryDTO);
 
     /**
      * 查询当前用户

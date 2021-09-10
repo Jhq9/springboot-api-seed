@@ -3,14 +3,14 @@ package com.vanwei.tech.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.crypto.SecureUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vanwei.tech.dto.PayloadDTO;
+import com.vanwei.tech.security.JwtPayload;
 import com.vanwei.tech.dto.UserDTO;
 import com.vanwei.tech.dto.request.UserLoginRequestDTO;
+import com.vanwei.tech.dto.request.UserQueryRequestDTO;
 import com.vanwei.tech.dto.request.UserRequestDTO;
 import com.vanwei.tech.entity.Role;
 import com.vanwei.tech.entity.User;
@@ -34,6 +34,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
@@ -70,8 +71,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public IPage<UserVO> listUser(Page page, UserRequestDTO userRequestDTO) {
-        return baseMapper.selectPageVo(page, userRequestDTO);
+    public Page<UserVO> listUser(UserQueryRequestDTO queryDTO) {
+        return baseMapper.selectPageVo(new Page(queryDTO.getPage(), queryDTO.getSize()), queryDTO);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         UserDTO userDTO = new UserDTO();
 
-        userDTO.setUserVO(userVO);
+        BeanUtil.copyProperties(userVO, userDTO);
 
         return userDTO;
     }
@@ -109,13 +110,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         final SecurityUser userDetails = SecurityUtils.getUser();
         Instant instant = Instant.now(Clock.system(ZoneId.of(ZONE_ID_ASIA_SHANGHAI)));
 
-        PayloadDTO payloadDTO = PayloadDTO.builder()
+        JwtPayload jwtPayload = JwtPayload.builder()
                 .exp(jwtProperties.getExpiresIn())
                 .nbf(instant.toEpochMilli())
                 .username(userDetails.getUsername())
                 .build();
 
-        String accessToken = JwtUtil.generateToken(objectMapper.writeValueAsString(payloadDTO), jwtProperties.getSecret());
+        String accessToken = JwtUtil.generateToken(objectMapper.writeValueAsString(jwtPayload), jwtProperties.getSecret());
+
+        User user = getById(userDetails.getId());
+        user.setLastLoginTime(LocalDateTime.now());
+
+        this.updateById(user);
 
         UserInfoVO userInfo = new UserInfoVO();
 
@@ -124,11 +130,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userInfo.setAccessToken(accessToken);
         userInfo.setExpiresIn(jwtProperties.getExpiresIn());
         userInfo.setTokenType(jwtProperties.getTokenType());
-
-        User user = getById(userInfo.getId());
-        user.setLastLoginTime(LocalDateTime.ofInstant(instant, ZoneId.of(ZONE_ID_ASIA_SHANGHAI)));
-
-        this.updateById(user);
+        userInfo.setUpdateTime(user.getUpdateTime());
+        userInfo.setLastLoginTime(userDetails.getLastLoginTime());
 
         return userInfo;
     }
@@ -154,7 +157,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = TransactionException.class)
     public boolean initAdmin() {
         User user = getOne("admin");
         if (Objects.nonNull(user)) {
@@ -165,9 +168,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user = new User();
 
         user.setUsername("admin");
-        String userName= SecureUtil.md5("9dak5tvb");
-        user.setPassword(passwordEncoder.encode(userName));
-        user.setPhone("15700084691");
+        String password = SecureUtil.md5("admin");
+        user.setPassword(passwordEncoder.encode(password));
+        user.setMobile("15700084691");
         user.setEmail("1044038055@qq.com");
         user.setStatus(STATUS_NORMAL);
 
@@ -182,7 +185,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = baseMapper.selectById(id);
         Assert.notNull(user, "用户不存在");
 
-        user.setPhone(userRequestDTO.getPhone());
+        user.setMobile(userRequestDTO.getMobile());
         user.setEmail(userRequestDTO.getEmail());
         user.setStatus(userRequestDTO.getStatus());
         int count = baseMapper.updateById(user);
@@ -226,7 +229,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @param username 用户的账号
      */
     private void checkUsername(String username) {
-        int count = this.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
+        long count = this.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
         Assert.isTrue(count == 0, "账号已被占用");
     }
 }

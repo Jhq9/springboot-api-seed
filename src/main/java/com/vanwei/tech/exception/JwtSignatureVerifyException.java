@@ -1,6 +1,12 @@
 package com.vanwei.tech.exception;
 
-
+/**
+ * JWT Signature verify exception
+ *
+ * @author jin_huaquan
+ * @version 1.0
+ * @date 2021/9/10 11:43
+ */
 public class JwtSignatureVerifyException extends Exception {
 
     /**

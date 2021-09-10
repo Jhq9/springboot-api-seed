@@ -16,7 +16,7 @@ spring:
   application:
     name: springboot-api-seed
   profiles:
-    active: dev
+    active: prod
   mvc:
     throw-exception-if-no-handler-found: true
     dispatch-options-request: true
@@ -45,6 +45,19 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: em_test
+    password: em_123456
+    url: jdbc:mysql://127.0.0.1:3306/springboot_api_seed?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-test-query: SELECT 1
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: Hikaricp-pool
 
 # mybatis-plus配置
 mybatis-plus:
@@ -58,7 +71,7 @@ mybatis-plus:
       logic-not-delete-value: 0
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
 
 #TOKEN工具
 jwt:
@@ -69,3 +82,6 @@ jwt:
 
 logging:
   config: classpath:config/logback-spring.xml
+  file:
+    path: /var/log/${spring.application.name}
+

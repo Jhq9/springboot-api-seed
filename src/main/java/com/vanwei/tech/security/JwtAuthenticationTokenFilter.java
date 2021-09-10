@@ -2,7 +2,6 @@ package com.vanwei.tech.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
-import com.vanwei.tech.dto.PayloadDTO;
 import com.vanwei.tech.exception.JwtSignatureVerifyException;
 import com.vanwei.tech.properties.JwtProperties;
 import com.vanwei.tech.util.JwtUtil;
@@ -63,14 +62,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
             try {
                 String payload = JwtUtil.verifySignature(authToken, jwtProperties.getSecret());
-                PayloadDTO payloadDTO = objectMapper.readValue(payload, PayloadDTO.class);
-                log.info("checking authentication {}", payloadDTO.getUsername());
+                JwtPayload jwtPayload = objectMapper.readValue(payload, JwtPayload.class);
+                log.info("checking authentication {}", jwtPayload.getUsername());
 
                 if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(payloadDTO.getUsername());
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(jwtPayload.getUsername());
 
                     //校验TOKEN是否有效
-                    if (payloadDTO.isExpired()) {
+                    if (jwtPayload.isExpired()) {
                         setUnauthorizedResponse(response, "登录已过期，请重新登录");
                         return;
                     }

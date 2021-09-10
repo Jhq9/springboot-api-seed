@@ -17,12 +17,12 @@ public enum RoleEnum {
     /**
      * 角色的标识
      */
-    private String name;
+    private final String name;
 
     /**
      * 角色的说明
      */
-    private String mark;
+    private final String mark;
 
     RoleEnum(String name, String mark) {
         this.name = name;

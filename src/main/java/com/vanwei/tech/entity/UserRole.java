@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @date 2020/8/3 19:05
  */
 @Data
-@TableName("e_user_role")
+@TableName("sys_user_role")
 public class UserRole implements Serializable {
 
     /**

@@ -7,7 +7,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(222)
+/**
+ *  Init Admin Account
+ *
+ *  @author     jin_huaquan
+ *  @date      2021/9/10 13:43
+ *  @version   1.0
+ */
+@Order(2)
 @Component
 @AllArgsConstructor
 @Slf4j

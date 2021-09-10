@@ -3,6 +3,7 @@ package com.vanwei.tech.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.vanwei.tech.dto.request.UserQueryRequestDTO;
 import com.vanwei.tech.entity.User;
 import com.vanwei.tech.dto.request.UserRequestDTO;
 import com.vanwei.tech.vo.UserVO;
@@ -38,9 +39,9 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 分页查询用户列表
      *
-     * @param page           分页信息
-     * @param userRequestDTO 查询条件信息
+     * @param page  分页信息
+     * @param query 查询条件信息
      * @return 用户列表
      */
-    IPage<UserVO> selectPageVo(Page page, @Param("query") UserRequestDTO userRequestDTO);
+    Page<UserVO> selectPageVo(Page page, @Param("query") UserQueryRequestDTO query);
 }

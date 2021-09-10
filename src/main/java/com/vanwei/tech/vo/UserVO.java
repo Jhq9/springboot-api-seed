@@ -39,7 +39,7 @@ public class UserVO {
     /**
      * 用户手机号
      */
-    private String phone;
+    private String mobile;
 
     /**
      * 用户邮箱

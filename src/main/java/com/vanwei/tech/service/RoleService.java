@@ -3,6 +3,7 @@ package com.vanwei.tech.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.vanwei.tech.dto.request.RoleQueryRequestDTO;
 import com.vanwei.tech.entity.Role;
 import com.vanwei.tech.dto.request.RoleRequestDTO;
 import com.vanwei.tech.vo.RoleVO;
@@ -22,11 +23,10 @@ public interface RoleService extends IService<Role> {
     /**
      * 分页获取角色列表
      *
-     * @param page    页码信息
-     * @param roleDTO 查询信息
+     * @param queryDTO 查询信息
      * @return 角色列表
      */
-    IPage<RoleVO> listRole(Page page, RoleRequestDTO roleDTO);
+    Page<RoleVO> listRole(RoleQueryRequestDTO queryDTO);
 
     /**
      * 查询角色列表

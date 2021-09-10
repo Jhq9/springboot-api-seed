@@ -79,7 +79,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .createAuthorityList(permissionSet.toArray(new String[0]));
 
         // 构造security用户
-        return new SecurityUser(user.getId(), 0L, user.getPhone(), user.getEmail(), user.getStatus(), user.getLastLoginTime(),
+        return new SecurityUser(user.getId(), 0L, user.getMobile(), user.getEmail(), user.getStatus(), user.getLastLoginTime(),
                 user.getCreateTime(), user.getUsername(), user.getPassword(), Objects.equals(user.getStatus(), STATUS_NORMAL),
                 true, true, true, user.getRoleList(), authorities);
     }

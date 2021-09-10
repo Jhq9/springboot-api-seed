@@ -17,7 +17,7 @@
     <select id="selectListByName" resultMap="baseResultMap">
         SELECT
         <include refid="roleSql"/>
-        FROM e_role r
+        FROM sys_role r
         <where>
             r.deleted = 0
             <if test="name != null and name != ''">
@@ -30,13 +30,13 @@
     <select id="selectListByUserId" resultMap="baseResultMap">
         SELECT
         <include refid="roleSql"/>
-        FROM e_role r LEFT JOIN w_user_role ur ON r.id=ur.role_id WHERE r.deleted=0 AND ur.user_id=#{userId}
+        FROM sys_role r LEFT JOIN w_user_role ur ON r.id=ur.role_id WHERE r.deleted=0 AND ur.user_id=#{userId}
     </select>
 
-    <select id="selectPageVo" resultMap="baseResultMap">
+    <select id="selectPageVO" resultMap="baseResultMap">
         SELECT
         <include refid="roleSql"/>
-        FROM e_role r
+        FROM sys_role r
         <where>
             r.deleted = 0
             <if test="query.name != null and query.name != ''">

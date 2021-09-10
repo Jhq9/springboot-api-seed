@@ -2,11 +2,16 @@ package com.vanwei.tech.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.vanwei.tech.annotation.Log;
+import com.vanwei.tech.dto.request.RoleQueryRequestDTO;
 import com.vanwei.tech.dto.request.RoleRequestDTO;
 import com.vanwei.tech.service.RoleService;
 import com.vanwei.tech.util.Result;
 import com.vanwei.tech.vo.RoleVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +29,8 @@ import java.util.Map;
  * @version 1.0
  * @date 2020/8/4 10:28
  */
+@Api(value = "角色", tags = "角色")
+@ApiSort(2)
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/roles")
@@ -33,6 +40,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @ApiOperation(value = "查询角色列表", notes = "查询角色列表")
+    @ApiOperationSupport(author = "1044038055@qq.com", order = 1)
     @ApiImplicitParam(name = "name", value = "角色的名称", paramType = "query", dataTypeClass = String.class)
     @Log
     @GetMapping("/actions/list")
@@ -43,15 +51,17 @@ public class RoleController {
     }
 
     @ApiOperation(value = "分页查询角色列表", notes = "分页查询角色列表")
+    @ApiOperationSupport(author = "1044038055@qq.com", order = 2)
     @Log
     @GetMapping("/actions/query")
-    public Result<IPage<RoleVO>> listRole(Page page, RoleRequestDTO roleDTO) {
+    public Result<Page<RoleVO>> listRole(RoleQueryRequestDTO queryDTO) {
         log.debug("API CALL : Query Role.");
 
-        return Result.ok(roleService.listRole(page, roleDTO));
+        return Result.ok(roleService.listRole(queryDTO));
     }
 
     @ApiOperation(value = "保存角色", notes = "保存角色")
+    @ApiOperationSupport(author = "1044038055@qq.com", order = 3)
     @Log
     @PostMapping("")
     public Result<Map<String, Boolean>> saveRole(@Valid @RequestBody RoleRequestDTO roleDTO) {
@@ -61,6 +71,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "更新角色", notes = "更新角色信息")
+    @ApiOperationSupport(author = "1044038055@qq.com", order = 4)
     @ApiImplicitParam(name = "id", value = "角色的ID", paramType = "path", dataTypeClass = Long.class, required = true)
     @Log
     @PutMapping("/{id}")
@@ -70,6 +81,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "删除角色", notes = "删除角色")
+    @ApiOperationSupport(author = "1044038055@qq.com", order = 5)
     @ApiImplicitParam(name = "id", value = "角色的ID", paramType = "path", dataTypeClass = Long.class, required = true)
     @Log
     @DeleteMapping("/{id}")

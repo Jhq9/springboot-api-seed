@@ -29,8 +29,11 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author lengleng
- * @date 2019/2/1 扩展用户信息
+ * Security User
+ *
+ * @author jin_huaquan
+ * @version 1.0
+ * @date 2021/9/10 14:18
  */
 public class SecurityUser extends User {
 
@@ -38,49 +41,49 @@ public class SecurityUser extends User {
      * 用户ID
      */
     @Getter
-    private Long id;
+    private final Long id;
 
     /**
      * 部门ID FIXME(是否引入部门需要待确定)
      */
     @Getter
-    private Long deptId;
+    private final Long deptId;
 
     /**
      * 手机号
      */
     @Getter
-    private String phone;
+    private final String mobile;
 
     /**
      * 邮箱地址
      */
     @Getter
-    private String email;
+    private final String email;
 
     /**
      * 用户的状态值
      */
     @Getter
-    private Integer status;
+    private final Integer status;
 
     /**
      * 上次登陆时间
      */
     @Getter
-    private LocalDateTime lastLoginTime;
+    private final LocalDateTime lastLoginTime;
 
     /**
      * 创建账号时间
      */
     @Getter
-    private LocalDateTime createTime;
+    private final LocalDateTime createTime;
 
     /**
      * 关联角色集合
      */
     @Getter
-    private List<RoleDTO> roles;
+    private final List<RoleDTO> roles;
 
     /**
      * Construct the <code>User</code> with the details required by
@@ -102,14 +105,14 @@ public class SecurityUser extends User {
      * @throws IllegalArgumentException if a <code>null</code> value was passed either as
      *                                  a parameter or as an element in the <code>GrantedAuthority</code> collection
      */
-    public SecurityUser(Long id, Long deptId, String phone, String email, Integer status, LocalDateTime lastLoginTime,
+    public SecurityUser(Long id, Long deptId, String mobile, String email, Integer status, LocalDateTime lastLoginTime,
                         LocalDateTime createTime, String username, String password, boolean enabled, boolean accountNonExpired,
                         boolean credentialsNonExpired, boolean accountNonLocked, List<RoleDTO> roles,
                         Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
         this.deptId = deptId;
-        this.phone = phone;
+        this.mobile = mobile;
         this.email = email;
         this.status = status;
         this.lastLoginTime = lastLoginTime;

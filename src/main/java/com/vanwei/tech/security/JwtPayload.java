@@ -1,4 +1,4 @@
-package com.vanwei.tech.dto;
+package com.vanwei.tech.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +21,7 @@ import static com.vanwei.tech.constant.CommonConstants.ZONE_ID_ASIA_SHANGHAI;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PayloadDTO implements Serializable {
+public class JwtPayload implements Serializable {
 
 
     /**

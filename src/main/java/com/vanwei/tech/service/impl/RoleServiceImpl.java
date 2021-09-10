@@ -1,10 +1,10 @@
 package com.vanwei.tech.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.vanwei.tech.dto.request.RoleQueryRequestDTO;
 import com.vanwei.tech.entity.Role;
 import com.vanwei.tech.entity.UserRole;
 import com.vanwei.tech.dto.request.RoleRequestDTO;
@@ -42,8 +42,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private final UserRoleService userRoleService;
 
     @Override
-    public IPage<RoleVO> listRole(Page page, RoleRequestDTO roleDTO) {
-        return baseMapper.selectPageVo(page, roleDTO);
+    public Page<RoleVO> listRole(RoleQueryRequestDTO queryDTO) {
+        return baseMapper.selectPageVO(new Page(queryDTO.getPage(), queryDTO.getSize()), queryDTO);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      * @param name 角色名称
      */
     private void checkName(String name) {
-        int count = this.count(Wrappers.<Role>lambdaQuery().eq(Role::getName, name));
+        long count = this.count(Wrappers.<Role>lambdaQuery().eq(Role::getName, name));
         Assert.isTrue(count == 0, "已存在相同名称的角色,请检查角色名称");
     }
 
@@ -159,7 +159,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      * @param id 角色的ID
      */
     private void checkLink(Long id) {
-        int count = userRoleService.count(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getRoleId, id));
+        long count = userRoleService.count(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getRoleId, id));
         Assert.isTrue(count == 0, "有用户关联了该角色,不能进行删除操作");
     }
 }

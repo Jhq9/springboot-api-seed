@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @version 1.0
  * @date 2019/12/30 10:52
  */
-@Order(111)
+@Order(1)
 @Component
 @AllArgsConstructor
 @Slf4j

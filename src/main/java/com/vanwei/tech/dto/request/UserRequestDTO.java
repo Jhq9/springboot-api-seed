@@ -31,7 +31,7 @@ public class UserRequestDTO implements Serializable {
     /**
      * 手机号
      */
-    private String phone;
+    private String mobile;
 
     /**
      * 邮箱

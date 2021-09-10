@@ -1,7 +1,8 @@
 package com.vanwei.tech.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
+import com.vanwei.tech.core.BaseEntity;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -13,15 +14,12 @@ import java.time.LocalDateTime;
  * @version 1.0
  * @date 2020/8/3 18:45
  */
-@Data
-@TableName("e_user")
-public class User implements Serializable {
-
-    /**
-     * ID
-     */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+@Getter
+@Setter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@TableName("sys_user")
+public class User extends BaseEntity {
 
     /**
      * 用户账号
@@ -38,8 +36,8 @@ public class User implements Serializable {
     /**
      * 手机号
      */
-    @TableField("phone")
-    private String phone;
+    @TableField("mobile")
+    private String mobile;
 
     /**
      * 邮箱
@@ -58,22 +56,4 @@ public class User implements Serializable {
      */
     @TableField("last_login_time")
     private LocalDateTime lastLoginTime;
-
-    /**
-     * 创建时间
-     */
-    @TableField("create_time")
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @TableField("update_time")
-    private LocalDateTime updateTime;
-
-    /**
-     * 删除标识（0-正常,1-删除）
-     */
-    @TableLogic
-    private Integer deleted;
 }

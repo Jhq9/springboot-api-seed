@@ -3,6 +3,7 @@ package com.vanwei.tech.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.vanwei.tech.dto.request.RoleQueryRequestDTO;
 import com.vanwei.tech.entity.Role;
 import com.vanwei.tech.dto.request.RoleRequestDTO;
 import com.vanwei.tech.vo.RoleVO;
@@ -40,9 +41,9 @@ public interface RoleMapper extends BaseMapper<Role> {
     /**
      * 分页查询角色列表
      *
-     * @param page    分页信息
-     * @param roleDTO 查询条件信息
+     * @param page  分页信息
+     * @param query 查询信息
      * @return 角色列表
      */
-    IPage<RoleVO> selectPageVo(Page page, @Param("query") RoleRequestDTO roleDTO);
+    Page<RoleVO> selectPageVO(Page page, @Param("query") RoleQueryRequestDTO query);
 }

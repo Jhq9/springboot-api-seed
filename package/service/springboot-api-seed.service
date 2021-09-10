@@ -1,0 +1,16 @@
+[Unit]
+Description=Operation Platform
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar -Duser.timezone=GMT+08 /usr/local/bin/operation-platform/operation-platform-1.0.0-RELEASE.jar --spring.config.location=/usr/local/etc/operation-platform/application.yml
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=always
+Type=simple
+RestartSec=5
+LimitNOFILE=64000
+
+[Install]
+WantedBy=multi-user.target
+Alias=operation-platform.service
