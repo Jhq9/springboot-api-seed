@@ -24,7 +24,6 @@
 
 - ##### JWT : https://jwt.io/
 
-2. #### 
 
 2. #### 项目结构说明
 
@@ -168,6 +167,7 @@
    │                           └── GeberatorUIServer.java			# 在线页面生成基础Entity、Mapper等等类的工具类
    ```
 
+
 3. ####  项目打包部署
 
    ##### (1) Linux在线安装
@@ -199,6 +199,7 @@
    # 连接的是外置的数据库
    docker run -d -p 8080:8080 -v ./logs/:/var/logs/ --name springboot-api-seed springboot-api-seed:0.0.1-SNAPSHOT
    ```
+
 
 4. ####  接口文档
 
